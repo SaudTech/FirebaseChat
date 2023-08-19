@@ -1,20 +1,29 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, IconButton, Box } from '@mui/material';
-import { MdExitToApp } from 'react-icons/md';  // Logout Icon from React Icons
+import { TbLogout as LogoutIcon } from 'react-icons/tb';
+import { useAuth } from "../AuthContext";
+import logout from "../utils/logout"
+
 
 function NavigationBar() {
+  const navigate = useNavigate();
+  const currentUser = useAuth();
   const location = useLocation();  // React Router hook to get the current location
 
   return (
-    <AppBar position="sticky" color="charcoal">
+    <AppBar position="static" color="charcoal">
       <Toolbar>
-        <Typography variant="h6" component="div" className='text-white' sx={{ flexGrow: 1 }}>
+        <div className='flex-1'>
+        <Typography variant="h6" component="div" className='text-white'>
           Real time chat
         </Typography>
+        <Typography variant="body1" component="div" className='text-white'>
+          Welcome back, {currentUser?.displayName ?? currentUser?.email}
+        </Typography>
+        </div>
 
-        <Box sx={{ color:"#fff",display: 'flex', alignItems: 'center', gap: 2 }}>
-          {/* Using Link as the component for MUI Buttons */}
+        <Box sx={{ color: "#fff", display: 'flex', alignItems: 'center', gap: 2 }}>
           <Button color={location.pathname === '/' ? 'primary' : 'inherit'} component={Link} to="/">
             Home
           </Button>
@@ -32,8 +41,8 @@ function NavigationBar() {
           </Button>
         </Box>
 
-        <IconButton edge="end" color="inherit" sx={{ color: 'red' }}>
-          <MdExitToApp />
+        <IconButton edge="end" color="inherit" sx={{ color: 'red' }} onClick={() => logout(navigate)}>
+          <LogoutIcon />
         </IconButton>
       </Toolbar>
     </AppBar>

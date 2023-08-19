@@ -23,7 +23,7 @@
   },
 
   /* Updated include pattern */
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/App.jsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
 
   "references": [{ "path": "./tsconfig.node.json" }]
 }

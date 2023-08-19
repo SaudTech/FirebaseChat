@@ -1,13 +1,14 @@
 import React from 'react';
 import NavigationBar from '../components/NavigationBar';
 import { Container } from '@mui/material';
+import { Outlet } from 'react-router-dom';
 
-function DefaultLayout({ children }) {
+function DefaultLayout() {
   return (
     <div>
       <NavigationBar />
       <Container>
-        {children}
+        <Outlet />
       </Container>
     </div>
   );
