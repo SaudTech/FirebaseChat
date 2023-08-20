@@ -1,7 +1,10 @@
 import { getAuth, signOut } from "firebase/auth";
 import { toast } from "react-toastify";
+import app from '../config/firebaseInit';
 
-const auth = getAuth();
+
+const auth = getAuth(app);
+
 const logout = async (navigate) => {
   signOut(auth).then(() => {
     toast.success("Logout Successful");

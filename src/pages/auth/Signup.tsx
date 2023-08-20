@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import app from '../../config/firebase';
+import app from '../../config/firebaseInit';
 import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Button, TextField } from "@mui/material"
 import { FcGoogle } from 'react-icons/fc'

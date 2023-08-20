@@ -9,6 +9,7 @@ import logout from "../utils/logout"
 function NavigationBar() {
   const navigate = useNavigate();
   const currentUser = useAuth();
+  console.log(currentUser?.uid);
   const location = useLocation();  // React Router hook to get the current location
 
   return (
@@ -28,15 +29,11 @@ function NavigationBar() {
             Home
           </Button>
 
-          <Button color={location.pathname === '/find-users' ? 'primary' : 'inherit'} component={Link} to="/find-users">
-            Find users
-          </Button>
-
           <Button color={location.pathname === '/messages' ? 'primary' : 'inherit'} component={Link} to="/messages">
             Messages
           </Button>
 
-          <Button color={location.pathname === '/profile' ? 'primary' : 'inherit'} component={Link} to="/profile">
+          <Button color={location.pathname === `/profile/${currentUser?.uid}` ? 'primary' : 'inherit'} component={Link} to={`/profile/${currentUser?.uid}`}>
             Profile
           </Button>
         </Box>

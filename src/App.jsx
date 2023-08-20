@@ -1,13 +1,11 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React from 'react';
 import 'react-toastify/dist/ReactToastify.css';
-import Home from './pages/Home';
-import Signin from './pages/auth/Signin';
-import Signup from './pages/auth/Signup';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import DefaultLayout from './layout/DefaultLayout';
-import AuthContext, { AuthProvider } from './AuthContext';
+import { AuthProvider } from './AuthContext';
+import * as Components from "./pages"
 
 
 const theme = createTheme({
@@ -28,10 +26,12 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<DefaultLayout />}>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Components.Home />} />
+                <Route path="/profile/:uid" element={<Components.Profile />} />
+                <Route path="/messages" element={<Components.Messages />} />
               </Route>
-              <Route path="/signin" element={<Signin />} />
-              <Route path="/signup" element={<Signup />} />
+              <Route path="/signin" element={<Components.auth.Signin />} />
+              <Route path="/signup" element={<Components.auth.Signup />} />
             </Routes>
           </BrowserRouter>
         </div>
