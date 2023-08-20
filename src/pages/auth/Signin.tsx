@@ -13,7 +13,6 @@ const Signin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('Test@gmail.com');
   const [password, setPassword] = useState('123456');
-  const [status, setStatus] = useState('');
 
 
   const handleSignin = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -36,7 +35,6 @@ const Signin = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential?.accessToken;
         const user = result.user;
@@ -44,9 +42,7 @@ const Signin = () => {
         localStorage.setItem('user', JSON.stringify(user))
         navigate('/')
       }).catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        const credential = GoogleAuthProvider.credentialFromError(error);
         toast.error(errorMessage)
       });
   };
@@ -76,7 +72,6 @@ const Signin = () => {
             Sign in with <FcGoogle />
           </Button>
         </div>
-        {status && <h1>{status}</h1>}
       </div>
     </div>
   )

@@ -4,27 +4,42 @@ import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWith
 import { Button, TextField } from "@mui/material"
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom';
+import { getFirestore, collection, addDoc } from "firebase/firestore"; 
+import { toast } from 'react-toastify';
+
 const auth = getAuth(app);
+const db = getFirestore(app);
+
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [status, setStatus] = useState('');
 
 
   const handleSignup = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        localStorage.setItem('user', JSON.stringify(user))
-        setStatus('Account Created Successfully')
-        navigate('/')
+      .then(async (userCredential) => {
+
+        try {
+          const user = userCredential.user;
+          const docRef = await addDoc(collection(db, "users"), {
+            username: username,
+            email: email,
+            userId: user.uid,
+          });
+          console.log("Document written with ID: ", docRef.id);
+          toast.success('Account Created Successfully')
+          navigate('/')
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
       })
       .catch((error) => {
         const errorMessage = error.message.replace("Firebase: ", '').replace(" (auth/weak-password)", '')
-        setStatus(errorMessage)
+        toast.error(errorMessage)
       });
   };
   const handleSignupWithGoogle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -37,16 +52,14 @@ const Signup = () => {
         const token = credential?.accessToken;
         console.log(`Token: ${token}`)
         const user = result.user;
-        setStatus('Account created using Google')
+        toast.success('Account Created Successfully')
         localStorage.setItem('user', JSON.stringify(user))
         navigate('/')
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(`Error Code: ${errorCode}`)
-        console.log(`Credential: ${credential}`)
-        setStatus(errorMessage)
+        toast.error(errorMessage)
       });
   };
 
@@ -62,6 +75,7 @@ const Signup = () => {
           </p>
         </div>
         <form className='flex flex-col gap-2'>
+          <TextField type="text" size='small' label='Username' className='rounded-sm p-2 py-1 caret-white  text-lavender-blush w-full focus:outline-none' value={username} onChange={(e) => setUsername(e.target.value)} />
           <TextField type="email" size='small' label='Email' className='rounded-sm p-2 py-1 caret-white  text-lavender-blush w-full focus:outline-none' value={email} onChange={(e) => setEmail(e.target.value)} />
           <TextField type="password" size='small' label='Password' className='rounded-sm p-2 py-1 caret-white  text-lavender-blush w-full focus:outline-none' value={password} onChange={(e) => setPassword(e.target.value)} />
         </form>
@@ -76,7 +90,6 @@ const Signup = () => {
             Sign up with <FcGoogle />
           </Button>
         </div>
-        {status && <h1>{status}</h1>}
       </div>
     </div>
   )

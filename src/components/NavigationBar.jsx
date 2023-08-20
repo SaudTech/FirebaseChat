@@ -9,7 +9,6 @@ import logout from "../utils/logout"
 function NavigationBar() {
   const navigate = useNavigate();
   const currentUser = useAuth();
-  console.log(currentUser?.uid);
   const location = useLocation();  // React Router hook to get the current location
 
   return (
