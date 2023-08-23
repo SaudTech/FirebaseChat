@@ -8,8 +8,9 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react'
-import { doc, getDocs, collection, query, where, orderBy, limit, getFirestore } from "firebase/firestore";
+import { doc, getDocs, collection, query, where, getFirestore } from "firebase/firestore";
 import { useAuth } from "../AuthContext";
+import ChatRoom from "../components/ChatRoom";
 
 import app from "../config/firebaseInit"
 
@@ -55,19 +56,25 @@ const Messages = () => {
   };
   const [messages, setMessages] = React.useState([]);
   const [newFriends, setNewFriends] = React.useState([]);
-  useEffect(() => {
-    if (currentUser) {
-      getRoomsForUser(currentUser?.uid)
-    };
-  }, [currentUser])
+  const [room, setRoom] = React.useState(null);
 
+  
   async function getRoomsForUser(uid) {
     const roomsQuery = query(collection(db, "rooms"), where("participants", "array-contains", uid));
     const querySnapshot = await getDocs(roomsQuery);
     let result = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     setMessages(result);
-  }
-
+  };
+  const updateRoomStatus = (status) => {
+    console.log(`Room id: ${room.id} status: ${status}`)
+  };
+  
+  
+  useEffect(() => {
+    if (currentUser) {
+      getRoomsForUser(currentUser?.uid)
+    };
+  }, [currentUser])
   return (
     <div className='text-start'>
       <Typography variant='h4' className='my-4'>Messages</Typography>
@@ -81,7 +88,7 @@ const Messages = () => {
           </Box>
           <CustomTabPanel value={tab} index={0}>
             <List sx={{ width: '100%', color: "white" }}>
-              {messages.map((room) => <DisplayRoom room={room} key={room.id} />)}
+              {messages.map((room) => <DisplayRoom room={room} selectRoom={() => setRoom(room)} key={room.id} />)}
             </List>
           </CustomTabPanel>
           <CustomTabPanel value={tab} index={1}>
@@ -104,17 +111,22 @@ const Messages = () => {
             </List>
           </CustomTabPanel>
         </Grid>
-        <Grid item xs={12} md={8} className='bg-photo-blue'>
+        <Grid item xs={12} md={8} className='bg-[#1A1F28]'>
+          {
+            room && <ChatRoom roomId={room?.id} setStatusOfRoom={updateRoomStatus} />
+          }
+          {
+            !room && <div className='flex items-center justify-center h-full text-white text-2xl'>Select a room</div>
+          }
         </Grid>
       </Grid>
     </div>
   )
 };
 
-const DisplayRoom = ({ room }) => {
-  console.log(room)
+const DisplayRoom = ({ room, selectRoom }) => {
   return (
-    <ListItem alignItems="flex-start" className="hover:bg-black/30 transition-all rounded-md">
+    <ListItem alignItems="flex-start" className="hover:bg-black/30 transition-all rounded-md cursor-pointer" onClick={selectRoom}>
       <ListItemAvatar>
         <Avatar alt={room.latestMessage?.senderUsername} />
       </ListItemAvatar>
@@ -122,8 +134,11 @@ const DisplayRoom = ({ room }) => {
         sx={{ color: "white" }}
         primary={room.latestMessage?.senderUsername}
         secondary={
-          <span className='text-white'>
+          <span className='text-white opacity-75'>
             {room.latestMessage?.message}
+            <div className='text-xs'>
+              {room?.status}
+            </div>
           </span>
         }
       />
