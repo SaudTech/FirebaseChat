@@ -8,7 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react'
-import { collection, getDocs, getFirestore } from "firebase/firestore";
+import { doc, getDocs, collection, query, where, orderBy, limit, getFirestore } from "firebase/firestore";
 import { useAuth } from "../AuthContext";
 
 import app from "../config/firebaseInit"
@@ -53,32 +53,20 @@ const Messages = () => {
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
-
   const [messages, setMessages] = React.useState([]);
   const [newFriends, setNewFriends] = React.useState([]);
-
   useEffect(() => {
-    fetchRooms();
-  }, [])
+    if (currentUser) {
+      getRoomsForUser(currentUser?.uid)
+    };
+  }, [currentUser])
 
-  const fetchRooms = async () => {
-    const uid = currentUser?.uid;
-    const query = collection(db, "rooms").where("participants", "array-contains", uid);
-    query.get().then((querySnapshot) => {
-      if (!querySnapshot.empty) {
-        querySnapshot.forEach((doc) => {
-          console.log(doc.id, " => ", doc.data());
-        });
-      } else {
-        console.log("No rooms found!");
-      }
-    }).catch((error) => {
-      console.error("Error querying rooms:", error);
-    });
-
-
-    setMessages(querySnapshot.docs.map((doc) => doc.data()));
-  };
+  async function getRoomsForUser(uid) {
+    const roomsQuery = query(collection(db, "rooms"), where("participants", "array-contains", uid));
+    const querySnapshot = await getDocs(roomsQuery);
+    let result = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setMessages(result);
+  }
 
   return (
     <div className='text-start'>
@@ -93,20 +81,7 @@ const Messages = () => {
           </Box>
           <CustomTabPanel value={tab} index={0}>
             <List sx={{ width: '100%', color: "white" }}>
-              <ListItem alignItems="flex-start" className="hover:bg-black/30 transition-all rounded-md">
-                <ListItemAvatar>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                  sx={{ color: "white" }}
-                  primary="Ali Connors"
-                  secondary={
-                    <span className='text-white'>
-                      I'll be in your neighborhood doing errands this…
-                    </span>
-                  }
-                />
-              </ListItem>
+              {messages.map((room) => <DisplayRoom room={room} key={room.id} />)}
             </List>
           </CustomTabPanel>
           <CustomTabPanel value={tab} index={1}>
@@ -134,6 +109,26 @@ const Messages = () => {
       </Grid>
     </div>
   )
-}
+};
+
+const DisplayRoom = ({ room }) => {
+  console.log(room)
+  return (
+    <ListItem alignItems="flex-start" className="hover:bg-black/30 transition-all rounded-md">
+      <ListItemAvatar>
+        <Avatar alt={room.latestMessage?.senderUsername} />
+      </ListItemAvatar>
+      <ListItemText
+        sx={{ color: "white" }}
+        primary={room.latestMessage?.senderUsername}
+        secondary={
+          <span className='text-white'>
+            {room.latestMessage?.message}
+          </span>
+        }
+      />
+    </ListItem>
+  )
+};
 
 export default Messages
