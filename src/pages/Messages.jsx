@@ -54,7 +54,7 @@ const Messages = () => {
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
-  const [messages, setMessages] = React.useState([]);
+  const [rooms, setRooms] = React.useState([]);
   const [newFriends, setNewFriends] = React.useState([]);
   const [room, setRoom] = React.useState(null);
 
@@ -63,7 +63,7 @@ const Messages = () => {
     const roomsQuery = query(collection(db, "rooms"), where("participants", "array-contains", uid));
     const querySnapshot = await getDocs(roomsQuery);
     let result = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setMessages(result);
+    setRooms(result);
   };
   const updateRoomStatus = (status) => {
     console.log(`Room id: ${room.id} status: ${status}`)
@@ -88,7 +88,7 @@ const Messages = () => {
           </Box>
           <CustomTabPanel value={tab} index={0}>
             <List sx={{ width: '100%', color: "white" }}>
-              {messages.map((room) => <DisplayRoom room={room} selectRoom={() => setRoom(room)} key={room.id} />)}
+              {rooms.map((room) => <DisplayRoom room={room} selectRoom={() => setRoom(room)} key={room.id} />)}
             </List>
           </CustomTabPanel>
           <CustomTabPanel value={tab} index={1}>
@@ -113,7 +113,7 @@ const Messages = () => {
         </Grid>
         <Grid item xs={12} md={8} className='bg-[#1A1F28]'>
           {
-            room && <ChatRoom roomId={room?.id} setStatusOfRoom={updateRoomStatus} />
+            room && <ChatRoom roomId={room?.id} room={room} setStatusOfRoom={updateRoomStatus} />
           }
           {
             !room && <div className='flex items-center justify-center h-full text-white text-2xl'>Select a room</div>
