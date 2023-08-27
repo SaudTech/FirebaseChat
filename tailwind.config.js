@@ -9,8 +9,8 @@ export default {
       colors: {
         'lavender-blush': '#EEE5E9',
         'photo-blue': '#92DCE5',
-        'gunmetal': '#2B303A',
-        'gray': '#7C7C7C',
+        'primary': '#6940C7',
+        'gray': '#5e5e5e',
       },
     },
   },

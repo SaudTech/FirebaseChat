@@ -50,7 +50,7 @@ const Signin = () => {
   return (
     <div className="h-full w-full flex justify-center items-center">
 
-      <div className='max-w-sm bg-lavender-blush flex justify-between flex-col text-gunmetal p-4 h-96 w-96 mx-auto rounded-md'>
+      <div className='max-w-sm bg-lavender-blush flex justify-between flex-col text-primary p-4 h-96 w-96 mx-auto rounded-md'>
         <div>
           <h1 className='text-3xl'>Signin</h1>
           <p>

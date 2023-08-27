@@ -8,7 +8,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  background-color: #2B303A;
+  background-color: #6940C7;
   color: #EEE5E9;
 
   font-synthesis: none;
@@ -17,3 +17,21 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+.glassMor {
+  /* Core Glassmorphism styles */
+  background: rgba(255, 255, 255, 0.1); /* This is a white background with 10% opacity */
+  border-radius: 10px; /* Rounded edges */
+  backdrop-filter: blur(10px); /* This is the main effect to blur the background content behind this element */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* A soft shadow to separate the element from the background */
+
+  /* Optional: You can add some padding and transition for better aesthetics */
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+/* Optional: Add hover effect */
+/* .glassMor:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+} */

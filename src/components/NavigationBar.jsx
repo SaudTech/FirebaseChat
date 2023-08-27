@@ -12,18 +12,18 @@ function NavigationBar() {
   const location = useLocation();  // React Router hook to get the current location
 
   return (
-    <AppBar position="static" color="charcoal">
+    <AppBar position="static" color="white">
       <Toolbar>
         <div className='flex-1'>
-        <Typography variant="h6" component="div" className='text-white'>
+        <Typography variant="h6" component="div">
           Real time chat
         </Typography>
-        <Typography variant="body1" component="div" className='text-white'>
+        <Typography variant="body1" component="div">
           Welcome back, {currentUser?.displayName ?? currentUser?.email}
         </Typography>
         </div>
 
-        <Box sx={{ color: "#fff", display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{display: 'flex', alignItems: 'center', gap: 2 }}>
           <Button color={location.pathname === '/' ? 'primary' : 'inherit'} component={Link} to="/">
             Home
           </Button>

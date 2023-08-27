@@ -10,9 +10,15 @@ import * as Components from "./pages"
 
 const theme = createTheme({
   palette: {
+    primary: {
+      main: "#6940C7"
+    },
     charcoal: {
       main: '#333333',
-    }
+    },
+    white: {
+      main: "#ffffff"
+    },
   },
 });
 
