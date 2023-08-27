@@ -1,5 +1,5 @@
 import Home from "./Home";
-import Profile from "./Profile";
+import Profile from "./Profile/Profile";
 import Messages from "./Messages";
 import Signin from "./auth/Signin";
 import Signup from "./auth/Signup";

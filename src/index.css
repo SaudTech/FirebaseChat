@@ -8,8 +8,10 @@
   line-height: 1.5;
   font-weight: 400;
 
-  background-color: #6940C7;
-  color: #EEE5E9;
+  /* background-color: #6940C7; */
+  background-color: white;
+  color: black;
+  /* color: #EEE5E9; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

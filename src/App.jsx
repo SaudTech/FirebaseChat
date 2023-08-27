@@ -13,6 +13,12 @@ const theme = createTheme({
     primary: {
       main: "#6940C7"
     },
+    photoblue: {
+      main: '#92DCE5',
+    },
+    lavenderblush: {
+      main: '#EEE5E9',
+    },
     charcoal: {
       main: '#333333',
     },
